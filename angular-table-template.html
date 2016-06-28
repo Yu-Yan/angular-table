@@ -1,0 +1,44 @@
+
+
+<div ng-class="config.tableContainerClass">
+    <div style="overflow: hidden;" ng-class="config.toolbarClass">
+        <angular-table-toolbar ng-repeat="item in config.toolLeft" formatter="item.formatter" initializer="item.initializer" refresh="refresh" params="config.params" style="float: left;" ng-class="[item.class, config.toolitemClass]"></angular-table-toolbar>
+        <angular-table-toolbar ng-repeat="item in config.toolRight" formatter="item.formatter" initializer="item.initializer" refresh="refresh" params="config.params" style="float: right" ng-class="[item.class, config.toolitemClass]"></angular-table-toolbar>
+    </div>
+    <table ng-class="config.tableClass">
+        <tr ng-class="config.headerClass">
+            <td ng-repeat="head in config.columns" ng-style="{'width': head.width, 'text-align': head.align}" ng-class="{'angular-table-header-not-sortable': !head.sortable}" ng-click="onClickSortButton(head.field, head.sortable)">
+                {{head.title}}
+                <span ng-if="head.sortable">
+                    <div style="float: right; position: relative; height: 20px; width: 10px; margin-right: 8px;">
+                        <div ng-class="{'angular-table-arrow-up': config.currentSort[0]!=head.field || config.currentSort[1]!='asc', 'angular-table-arrow-up-active': config.currentSort[0]==head.field && config.currentSort[1]=='asc'}" style="height: 5px; width: 5px; position: absolute; left: 0; top: 2px;"></div>
+                        <div ng-class="{'angular-table-arrow-down': config.currentSort[0]!=head.field || config.currentSort[1]!='desc', 'angular-table-arrow-down-active': config.currentSort[0]==head.field && config.currentSort[1]=='desc'}" style="height: 5px; width: 5px; position: absolute; left: 0; top: 13px;"></div>
+                    </div>
+                <span>
+            </td>
+        </tr>
+        <tr ng-repeat="data in datas.rows" ng-class="config.rowClass">
+            <td ng-repeat="head in config.columns" ng-style="{'width': head.width, 'text-align': head.align}">
+                <angular-table-cell data="data[head.field]" formatter="head.formatter" initializer="head.initializer" row="data"></angular-table-cell>
+                <!--{{data[head.field]}}-->
+            </td>
+        </tr>
+    </table>
+    <div style="margin-top: 10px;">
+        <div style="display: inline-block; float: left;" class="angular-table-tool-pagesize-select">
+            <span>choose page size:</span>
+            <select ng-model="pageSize" ng-options="item.name for item in pageSizeChoiceList track by item.value"></select>
+        </div>
+        <div style="display: inline-block; float: right;" class="angular-table-tool-page-bar">
+            <span>
+                <a ng-click="gotoPage(1)"><i class="fa fa-chevron-left"></i><i class="fa fa-chevron-left"></i></a>
+                <a ng-click="gotoPage(curPageNumber-1)"><i class="fa fa-chevron-left"></i></a>
+                <a ng-if="pageNumberList[0] != originalPageNumberList[0]">...</a>
+                <a ng-repeat="page in pageNumberList" ng-click="gotoPage(page)">{{page}}</a>
+                <a ng-if="pageNumberList[pageNumberList.length-1] != originalPageNumberList[originalPageNumberList.length-1]">...</a>
+                <a ng-click="gotoPage(curPageNumber+1)"><i class="fa fa-chevron-right"></i></a>
+                <a ng-click="gotoPage(pageNumberList.length)"><i class="fa fa-chevron-right"></i><i class="fa fa-chevron-right"></i></a>
+            </span>
+        </div>
+    </div>
+</div>
